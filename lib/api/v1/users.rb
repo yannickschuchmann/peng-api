@@ -11,8 +11,12 @@ module API
         end
         route_param :id do
           get do
-            User.find(params[:id])
+            # User.find(params[:id])
+            present User.find(params[:id])
           end
+        end
+        get do
+          present User.all
         end
       end
     end

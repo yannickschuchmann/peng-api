@@ -11,4 +11,32 @@ class User < ActiveRecord::Base
     end
   end
 
+  def rank
+    14
+  end
+
+  def friends_count
+    7
+  end
+
+  def slogan
+    "\"Ich habe noch nie easdn Spiel verloren.\""
+  end
+
+  def duels_count
+    self.duels.count
+  end
+
+  def entity
+    Entity.new(self)
+  end
+
+  class Entity < Grape::Entity
+    expose :id
+    expose :nick
+    expose :duels_count
+    expose :friends_count
+    expose :rank
+    expose :slogan
+  end
 end

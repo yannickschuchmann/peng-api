@@ -28,6 +28,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'grape'
 gem 'grape-raketasks'
+gem 'grape-entity'
 
 gem 'rack-cors', :require => 'rack/cors'
 # Use ActiveModel has_secure_password
