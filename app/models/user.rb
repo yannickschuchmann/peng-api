@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_many :actors
   has_many :duels, through: :actors
   has_many :actions, through: :actors
+  belongs_to :character
 
   after_create :new_user
 
@@ -27,6 +28,11 @@ class User < ActiveRecord::Base
     self.duels.count
   end
 
+  def character_name
+    cn = self.character.try(:name)
+    cn ? cn : "medic"
+  end
+
   def entity
     Entity.new(self)
   end
@@ -38,5 +44,6 @@ class User < ActiveRecord::Base
     expose :friends_count
     expose :rank
     expose :slogan
+    expose :character_name
   end
 end
