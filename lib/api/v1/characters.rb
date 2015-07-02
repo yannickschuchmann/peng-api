@@ -6,7 +6,7 @@ module API
 
       resource :characters do
         get do
-          present Character.all
+          present Character.all.order(:id)
         end
       end
     end

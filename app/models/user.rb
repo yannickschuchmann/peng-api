@@ -20,10 +20,6 @@ class User < ActiveRecord::Base
     7
   end
 
-  def slogan
-    "\"Ich habe noch nie easdn Spiel verloren.\""
-  end
-
   def duels_count
     self.duels.count
   end
@@ -31,6 +27,14 @@ class User < ActiveRecord::Base
   def character_name
     cn = self.character.try(:name)
     cn ? cn : "medic"
+  end
+
+  def character_order
+    if self.character
+      self.character.order
+    else
+      1
+    end
   end
 
   def entity
@@ -44,6 +48,8 @@ class User < ActiveRecord::Base
     expose :friends_count
     expose :rank
     expose :slogan
+    expose :character_id
     expose :character_name
+    expose :character_order
   end
 end

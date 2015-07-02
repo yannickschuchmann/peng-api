@@ -18,6 +18,15 @@ module API
         get do
           present User.all
         end
+        put ':id' do
+          present User.find(params[:id]).update(
+                      {
+                        nick: params[:nick],
+                        slogan: params[:slogan],
+                        character_id: params[:character_id]
+                      }
+                  )
+        end
       end
     end
   end
