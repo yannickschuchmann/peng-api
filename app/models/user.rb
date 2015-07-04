@@ -37,6 +37,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def open_duels
+    self.duels
+  end
+
+  def last_duels
+    self.duels
+  end
+
   def entity
     Entity.new(self)
   end
@@ -51,5 +59,7 @@ class User < ActiveRecord::Base
     expose :character_id
     expose :character_name
     expose :character_order
+    expose :open_duels, with: Duel::Entity
+    expose :last_duels, with: Duel::Entity
   end
 end

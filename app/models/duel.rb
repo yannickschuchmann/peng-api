@@ -23,4 +23,13 @@ class Duel < ActiveRecord::Base
     end
     return false
   end
+
+  def entity
+    Entity.new(self)
+  end
+
+  class Entity < Grape::Entity
+    expose :id
+    expose :updated_at
+  end
 end
