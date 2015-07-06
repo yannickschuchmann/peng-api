@@ -6,6 +6,7 @@ module API
 
       resource :users do
         desc "Return a user."
+
         params do
           requires :id, type: Integer, desc: "user id."
         end
@@ -15,9 +16,11 @@ module API
             present User.find(params[:id])
           end
         end
+
         get do
           present User.all
         end
+
         put ':id' do
           present User.find(params[:id]).update(
                       {
