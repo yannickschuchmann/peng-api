@@ -1,5 +1,6 @@
 module API
   module V1
+    require "http"
     class Users < Grape::API
       version 'v1'
       format :json
@@ -29,6 +30,15 @@ module API
                         character_id: params[:character_id]
                       }
                   )
+        end
+
+
+        post :check_credentials do
+          response = HTTP.headers(:accept => "application/json",
+                                  :authorization => params["X-Verify-Credentials-Authorization"]).get(params["X-Auth-Service-Provider"])
+          o = JSON.parse(response.body.readpartial)
+
+          present User.find_or_create_by(:phone => o["phone_number"])
         end
       end
     end
