@@ -5,15 +5,16 @@ module API
       format :json
 
       helpers do
-        def create_duel(user_id, opponent_id)
+        def create_duel(user_id, opponent_id, bet)
           actors = []
           actors << Actor.create(user_id: user_id, type: "challenger")
           actors << Actor.create(user_id: opponent_id, type: "challengee")
 
           duel = Duel.new
+          duel.bet = bet
           duel.actors << actors
           duel.save
-          
+
           actors.each do |actor|
             WebsocketRails.users[actor.user.id].send_message "duel.challenged", {duel: duel}
           end
@@ -42,7 +43,7 @@ module API
           requires :opponent_id, type: Integer, desc: "Challengee"
         end
         post do
-          present create_duel(params[:user_id], params[:opponent_id])
+          present create_duel(params[:user_id], params[:opponent_id], params[:bet])
         end
 
         params do
@@ -52,7 +53,7 @@ module API
           user_id = params[:user_id]
           opponent_id = User.where.not(id: user_id).limit(1).order("RANDOM()").first.id
 
-          present create_duel(user_id, opponent_id)
+          present create_duel(user_id, opponent_id, "")
         end
       end
     end

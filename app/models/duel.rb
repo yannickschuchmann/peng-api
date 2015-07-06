@@ -30,6 +30,7 @@ class Duel < ActiveRecord::Base
 
   class Entity < Grape::Entity
     expose :id
+    expose :bet
     expose :updated_at
   end
 end
