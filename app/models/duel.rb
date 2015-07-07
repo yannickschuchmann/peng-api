@@ -24,13 +24,22 @@ class Duel < ActiveRecord::Base
     return false
   end
 
+  def status
+    "Du bist dran"
+  end
+
+  def bet_default
+    self.bet == "" ? "Zufallsduel" : self.bet
+  end
+
   def entity
     Entity.new(self)
   end
 
   class Entity < Grape::Entity
     expose :id
-    expose :bet
+    expose :bet_default, as: :bet
+    expose :status
     expose :updated_at
   end
 end

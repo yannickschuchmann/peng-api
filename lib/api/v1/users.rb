@@ -19,7 +19,7 @@ module API
         end
 
         get do
-          present User.all
+          present User.all.order(:updated_at)
         end
 
         put ':id' do

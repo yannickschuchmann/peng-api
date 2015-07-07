@@ -13,11 +13,11 @@ class User < ActiveRecord::Base
   end
 
   def rank
-    14
+    User.all.order(:updated_at).map(&:id).index(self.id) + 1 # very fake rank
   end
 
   def friends_count
-    7
+    0
   end
 
   def duels_count
@@ -45,6 +45,10 @@ class User < ActiveRecord::Base
     self.duels
   end
 
+  def slogan_default
+    !self.slogan ? "Hey there! I am using Peng." : self.slogan
+  end
+
   def entity
     Entity.new(self)
   end
@@ -55,7 +59,7 @@ class User < ActiveRecord::Base
     expose :duels_count
     expose :friends_count
     expose :rank
-    expose :slogan
+    expose :slogan_default, as: :slogan
     expose :character_id
     expose :character_name
     expose :character_order
