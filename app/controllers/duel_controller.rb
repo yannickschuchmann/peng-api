@@ -9,7 +9,7 @@ class DuelController < WebsocketRails::BaseController
     duel.actors << actors
     duel.save
     actors.each do |actor|
-      WebsocketRails.users[actor.user.id].send_message "duel.challenged", {duel: duel}
+      WebsocketRails.users[actor.user.id].send_message "duels.challenged", {duel: duel}
     end
   end
 
@@ -17,4 +17,6 @@ class DuelController < WebsocketRails::BaseController
     trigger_success ({duels: User.find(message[:user_id])
                                  .duels.as_json(include: [:actors, {:rounds => {include: :actions}}])})
   end
+
+
 end
