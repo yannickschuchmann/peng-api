@@ -1,14 +1,20 @@
 class Duel < ActiveRecord::Base
-  has_many :actors
+  has_many :actors, dependent: :destroy
   has_many :users, through: :actors
-  has_many :rounds
+  has_many :rounds, dependent: :destroy
   has_many :actions, through: :rounds
 
-  after_create :create_first_round
+  after_create :setup_rounds
 
-  def create_first_round
-    first_round = Round.create(rid: 0, active: true)
-    self.rounds << first_round
+  def setup_rounds
+    first_round = Round.create(rid: 0, active: true, duel_id: self.id)
+    self.actors.each do |actor|
+      action = Action.create(
+          round_id: first_round.id,
+          actor_id: actor.id,
+          type: "neutral"
+      )
+    end
   end
 
   def end_of_round round

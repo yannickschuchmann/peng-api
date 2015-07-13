@@ -1,6 +1,6 @@
 class Round < ActiveRecord::Base
   belongs_to :duel
-  has_many :actions
+  has_many :actions, dependent: :destroy
   has_many :actors, through: :actions
 
   def evaluate

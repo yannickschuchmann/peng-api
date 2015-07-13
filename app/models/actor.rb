@@ -10,6 +10,6 @@ class Actor < ActiveRecord::Base
 
   def defaults
     self.hit_points ||= 1
-    self.shots ||= 1
+    self.shots ||= 0
   end
 end
