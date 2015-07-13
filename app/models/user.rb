@@ -39,10 +39,12 @@ class User < ActiveRecord::Base
 
   def open_duels
     self.duels
+  #   TODO
   end
 
   def last_duels
     self.duels
+  #   TODO
   end
 
   def slogan_default

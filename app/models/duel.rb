@@ -94,7 +94,7 @@ class Duel < ActiveRecord::Base
   class Entity < Grape::Entity
     expose :id
     expose :bet_default, as: :bet
-    expose :me do |duel,options|
+    expose :me, with: Actor::Entity do |duel,options|
       duel.me?(options[:user_id]) if options[:user_id]
     end
     expose :opponent do |duel,options|

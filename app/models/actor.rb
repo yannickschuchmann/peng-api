@@ -12,4 +12,27 @@ class Actor < ActiveRecord::Base
     self.hit_points ||= 1
     self.shots ||= 0
   end
+
+  def nick
+    self.user.nick
+  end
+
+  def character_name
+    self.user.character_name
+  end
+
+  def entity
+    Entity.new(self)
+  end
+
+  class Entity < Grape::Entity
+    expose :id
+    expose :user_id
+    expose :duel_id
+    expose :hit_points
+    expose :shots
+    expose :type
+    expose :nick
+    expose :character_name
+  end
 end
