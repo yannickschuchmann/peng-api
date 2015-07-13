@@ -49,7 +49,7 @@ class Duel < ActiveRecord::Base
     elsif self.my_turn? user_id
       "Du bist dran"
     else
-      "Warten auf Gegner"
+      "Warten ..."
     end
   end
 
@@ -97,7 +97,7 @@ class Duel < ActiveRecord::Base
     expose :me, with: Actor::Entity do |duel,options|
       duel.me?(options[:user_id]) if options[:user_id]
     end
-    expose :opponent do |duel,options|
+    expose :opponent, with: Actor::Entity do |duel,options|
       duel.opponent?(options[:user_id]) if options[:user_id]
     end
     expose :my_turn do |duel,options|

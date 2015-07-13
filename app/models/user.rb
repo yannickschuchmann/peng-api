@@ -38,13 +38,13 @@ class User < ActiveRecord::Base
   end
 
   def open_duels
-    self.duels
+    data = Duel::Entity.represent(self.duels, user_id: self.id)
   #   TODO
   end
 
   def last_duels
-    self.duels
-  #   TODO
+    data = Duel::Entity.represent(self.duels, user_id: self.id)
+    #   TODO
   end
 
   def slogan_default
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
     expose :character_id
     expose :character_name
     expose :character_order
-    expose :open_duels, with: Duel::Entity
-    expose :last_duels, with: Duel::Entity
+    expose :open_duels
+    expose :last_duels
   end
 end
