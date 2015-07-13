@@ -19,4 +19,6 @@ class DuelController < WebsocketRails::BaseController
   end
 
 
+
+
 end

@@ -21,6 +21,14 @@ class Round < ActiveRecord::Base
     self.duel.end_of_round self
   end
 
+  def my_turn? user_id
+    my_turn = true
+    self.actions.each do |action|
+      my_turn = false if action.actor.user_id == user_id
+    end
+    my_turn
+  end
+
   def get_result
     return false if self.actions.length != 2
 

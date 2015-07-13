@@ -30,7 +30,28 @@ module API
         end
         route_param :id do
           get do
-            present Duel.find(params[:id])
+            present Duel.find(params[:id]), user_id: params[:user_id].to_i unless params[:user_id].nil?
+          end
+
+          post do
+            return unless params[:id]
+
+            user_id = params[:user_id].to_i
+            duel = Duel.find(params[:id].to_i)
+            current_round = duel.rounds.last
+            actor = duel.me? user_id
+            if current_round.my_turn?(user_id) && actor
+              action = Action.create(
+                  round_id: current_round.id,
+                  actor_id: actor.id,
+                  type: params[:action_type]
+              )
+              present Duel.find(params[:id].to_i), user_id: user_id unless action.round.active
+            else
+              status 403
+              {error: "already committed an action."}.as_json
+            end
+
           end
         end
 
