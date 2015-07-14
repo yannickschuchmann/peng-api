@@ -46,7 +46,7 @@ module API
                   actor_id: actor.id,
                   type: params[:action_type]
               )
-              present Duel.find(params[:id].to_i), user_id: user_id unless action.round.active
+              present Duel.find(params[:id].to_i), user_id: user_id
             else
               status 403
               {error: "already committed an action."}.as_json

@@ -53,6 +53,11 @@ class Duel < ActiveRecord::Base
     end
   end
 
+  def result? user_id
+    result = self.rounds.last.get_result
+    result ? result["type"] : ""
+  end
+
   def my_turn? user_id
     self.rounds.last.my_turn? user_id unless self.rounds.empty?
   end
@@ -111,6 +116,9 @@ class Duel < ActiveRecord::Base
     end
     expose :opponent_action do |duel,options|
       duel.opponent_action?(options[:user_id]) if options[:user_id]
+    end
+    expose :result do |duel,options|
+      duel.result?(options[:user_id]) if options[:user_id]
     end
     expose :updated_at
   end
