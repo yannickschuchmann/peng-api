@@ -55,6 +55,8 @@ class Round < ActiveRecord::Base
     elsif actions[0].type == actions[1].type
       result["type"] = "same"
       result["action"] = actions[0].type
+    else
+      result["type"] = "nothing"
     end
 
     result

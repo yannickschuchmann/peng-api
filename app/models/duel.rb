@@ -54,7 +54,7 @@ class Duel < ActiveRecord::Base
   end
 
   def result? user_id
-    result = self.rounds.last.get_result
+    result = self.last_active_round.get_result
     result ? result["type"] : ""
   end
 

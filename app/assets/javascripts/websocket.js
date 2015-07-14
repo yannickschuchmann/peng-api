@@ -8,6 +8,7 @@ var API = {
     this.dispatcher.trigger('users.login', {user_id: this.user_id}, this.onLogin);
     this.dispatcher.bind('users.new', this.onUserNew);
     this.dispatcher.bind('duels.challenged', this.onChallenged);
+    this.dispatcher.bind('duels.action_posted', this.onActionPosted);
     return this;
   },
   startDuel: function(opponent) {
@@ -28,6 +29,9 @@ var API = {
   },
   onGetDuels: function(res) {
     console.log("my duels: ", res);
+  },
+  onActionPosted: function(res) {
+    console.log("action posted for duel: ", res);
   }
 
 }.init();

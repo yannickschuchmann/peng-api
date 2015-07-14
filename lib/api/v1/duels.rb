@@ -16,7 +16,7 @@ module API
           duel.save
 
           actors.each do |actor|
-            WebsocketRails.users[actor.user.id].send_message "duel.challenged", {duel: duel}
+            WebsocketRails.users[actor.user.id].send_message "duels.challenged", {duel: duel}
           end
           return duel
         end
@@ -46,6 +46,12 @@ module API
                   actor_id: actor.id,
                   type: params[:action_type]
               )
+
+              opponent = duel.opponent? user_id
+
+              data = Duel::Entity.represent(duel, user_id: opponent.user_id)
+              WebsocketRails.users[opponent.user_id].send_message "duels.action_posted", data
+
               present Duel.find(params[:id].to_i), user_id: user_id
             else
               status 403
