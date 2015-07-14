@@ -18,10 +18,10 @@ class Duel < ActiveRecord::Base
   end
 
   def end_of_round round
-    self.actors.each do |actor|
-      data = Entity.represent(self, user_id: actor.user_id.to_i, type: :end_of_round)
-      WebsocketRails.users[actor.user_id].send_message "duel.end_of_round", data.as_json
-    end
+    # self.actors.each do |actor|
+    #   data = Entity.represent(self, user_id: actor.user_id.to_i, type: :end_of_round)
+    #   WebsocketRails.users[actor.user_id].send_message "duel.end_of_round", data.as_json
+    # end
 
     return if self.winner
 

@@ -38,12 +38,18 @@ class User < ActiveRecord::Base
   end
 
   def open_duels
-    data = Duel::Entity.represent(self.duels, user_id: self.id)
-  #   TODO
+    duels = self.duels.select do |duel|
+      !duel.winner
+    end
+    data = Duel::Entity.represent(duels, user_id: self.id)
+
   end
 
   def last_duels
-    data = Duel::Entity.represent(self.duels, user_id: self.id)
+    duels = self.duels.select do |duel|
+      duel.winner
+    end
+    data = Duel::Entity.represent(duels, user_id: self.id)
     #   TODO
   end
 

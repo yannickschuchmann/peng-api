@@ -8,17 +8,18 @@ module API
         def create_duel(user_id, opponent_id, bet)
           actors = []
           actors << Actor.create(user_id: user_id, type: "challenger")
-          actors << Actor.create(user_id: opponent_id, type: "challengee")
+          opponent = Actor.create(user_id: opponent_id, type: "challengee")
+          actors << opponent
 
           duel = Duel.new
           duel.bet = bet
           duel.actors << actors
           duel.save
 
-          actors.each do |actor|
-            WebsocketRails.users[actor.user.id].send_message "duels.challenged", {duel: duel}
-          end
-          return duel
+          data = Duel::Entity.represent(duel, user_id: opponent.user_id)
+          WebsocketRails.users[opponent.user_id].send_message "duels.challenged", data
+
+          duel
         end
       end
 
