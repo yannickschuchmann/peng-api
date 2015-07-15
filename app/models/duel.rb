@@ -55,7 +55,9 @@ class Duel < ActiveRecord::Base
 
   def result? user_id
     status = status(user_id)
-    if status == "my_turn"
+    if self.rounds.length == 2 && self.rounds.last.actions.length == 0
+      'versus'
+    elsif status == "my_turn"
       result_type = self.last_active_round.get_result["type"]
     else
       status
