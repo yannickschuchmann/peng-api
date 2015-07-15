@@ -23,13 +23,15 @@ module API
         end
 
         put ':id' do
-          present User.find(params[:id]).update(
+          User.find(params[:id]).update(
                       {
                         nick: params[:nick],
                         slogan: params[:slogan],
                         character_id: params[:character_id]
                       }
                   )
+
+          present User.find(params[:id])
         end
 
 
