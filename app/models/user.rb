@@ -42,7 +42,6 @@ class User < ActiveRecord::Base
       !duel.winner
     end
     data = Duel::Entity.represent(duels, user_id: self.id)
-
   end
 
   def last_duels
@@ -50,7 +49,6 @@ class User < ActiveRecord::Base
       duel.winner
     end
     data = Duel::Entity.represent(duels, user_id: self.id)
-    #   TODO
   end
 
   def slogan_default
