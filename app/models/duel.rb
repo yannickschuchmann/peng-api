@@ -42,20 +42,25 @@ class Duel < ActiveRecord::Base
   def status user_id
     if (winner = self.winner)
       if winner.user_id == user_id
-        "Gewonnen"
+        "won"
       else
-        "Verloren"
+        "lost"
       end
     elsif self.my_turn? user_id
-      "Du bist dran"
+      "my_turn"
     else
-      "Warten ..."
+      "wait"
     end
   end
 
   def result? user_id
-    result = self.last_active_round.get_result
-    result ? result["type"] : ""
+    status = status(user_id)
+    if status == "my_turn"
+      result_type = self.last_active_round.get_result["type"]
+    else
+      status
+    end
+
   end
 
   def my_turn? user_id
@@ -109,7 +114,15 @@ class Duel < ActiveRecord::Base
       duel.my_turn?(options[:user_id]) if options[:user_id]
     end
     expose :status do |duel,options|
-      duel.status(options[:user_id]) if options[:user_id]
+      if options[:user_id]
+        status = duel.status(options[:user_id])
+        case status
+          when "won" then "Gewonnen"
+          when "lost" then "Verloren"
+          when "my_turn" then "Du bist dran"
+          when "wait" then "Warten ..."
+        end
+      end
     end
     expose :my_action do |duel,options|
       duel.my_action?(options[:user_id]) if options[:user_id]
