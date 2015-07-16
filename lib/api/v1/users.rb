@@ -44,7 +44,7 @@ module API
         end
 
         post :check_credentials_fix do
-          present User.find_or_create_by(:phone => params["phone_number"])
+          present User.find_or_create_by(:phone => params["phone-number"])
         end
       end
     end
