@@ -43,9 +43,6 @@ module API
           present User.find_or_create_by(:phone => o["phone_number"])
         end
 
-        post :check_credentials_fix do
-          present User.find_or_create_by(:phone => params["phone-number"])
-        end
       end
     end
   end

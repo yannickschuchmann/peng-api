@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   has_many :actions, through: :actors
   belongs_to :character
 
+  has_many :user_provider
+
   after_create :new_user
 
   def new_user
