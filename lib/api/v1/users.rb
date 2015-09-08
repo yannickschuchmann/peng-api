@@ -52,12 +52,11 @@ module API
 
           provider = UserProvider.find_or_create_by(:oauth_provider => "facebook",
                                                     :oauth_uid => params[:uid])
-
           provider.create_user({
-                                   "first_name" => @me[:first_name],
-                                   "last_name" => @me[:last_name],
-                                   "email" => @me[:email],
-                                   "picture" => @me[:picture]
+                                   "first_name" => @me["first_name"],
+                                   "last_name" => @me["last_name"],
+                                   "email" => @me["email"],
+                                   "picture" => @me["picture"]
                                }) if provider.user.nil?
 
           provider.save
