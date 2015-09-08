@@ -64,6 +64,10 @@ class User < ActiveRecord::Base
   class Entity < Grape::Entity
     expose :id
     expose :nick
+    expose :email
+    expose :first_name
+    expose :last_name
+    expose :picture
     expose :duels_count
     expose :friends_count
     expose :rank

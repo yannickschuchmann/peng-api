@@ -32,6 +32,8 @@ gem 'grape'
 gem 'grape-raketasks'
 gem 'grape-entity'
 
+gem 'koala', '~> 2.2'
+
 gem 'rails_12factor', group: :production
 
 gem 'rack-cors', :require => 'rack/cors'

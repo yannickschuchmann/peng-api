@@ -22,9 +22,9 @@ module API
         put ':id' do
           User.find(params[:id]).update(
               {
-                  nick => params[:nick],
-                  slogan => params[:slogan],
-                  character_id => params[:character_id]
+                  :nick => params[:nick],
+                  :slogan => params[:slogan],
+                  :character_id => params[:character_id]
               }
           )
 
@@ -41,20 +41,28 @@ module API
         end
 
         post :login_facebook do
-          debugger
-          provider = UserProvider.find_or_create_by(:oauth_provider => "facebook",
-                                                    :oauth_uid => params[:id])
 
-          user = provider.create_user({
-                                   "first_name" => params[:first_name],
-                                   "last_name" => params[:last_name],
-                                   "email" => params[:email]
-                                   # "picture" => params[:picture]
+          @graph = Koala::Facebook::API.new(params[:token])
+          @me = @graph.get_object("me", fields: ["id",
+                                                 "first_name",
+                                                 "last_name",
+                                                 "email",
+                                                 "picture",
+                                                 "friends"])
+
+          provider = UserProvider.find_or_create_by(:oauth_provider => "facebook",
+                                                    :oauth_uid => params[:uid])
+
+          provider.create_user({
+                                   "first_name" => @me[:first_name],
+                                   "last_name" => @me[:last_name],
+                                   "email" => @me[:email],
+                                   "picture" => @me[:picture]
                                }) if provider.user.nil?
 
+          provider.save
 
-
-          present user
+          present provider.user
         end
       end
     end

@@ -11,6 +11,8 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
+/config/facebook.yml
+
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
