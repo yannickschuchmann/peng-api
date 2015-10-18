@@ -12,8 +12,8 @@ shared_dir = File.expand_path("../../../../shared", __FILE__)
 
 
 # Set master PID and state locations
-pidfile "#{shared_dir}/pids/puma.pid"
-state_path "#{shared_dir}/pids/puma.state"
+pidfile "#{shared_dir}/tmp/pids/puma.pid"
+state_path "#{shared_dir}/tmp/pids/puma.state"
 activate_control_app
 
 on_worker_boot do
