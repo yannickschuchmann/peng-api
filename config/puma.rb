@@ -8,6 +8,8 @@ rackup      DefaultRackup
 port        ENV['PORT']     || 3000
 environment ENV['RACK_ENV'] || 'development'
 
+shared_dir = File.expand_path("../../../../shared", __FILE__)
+
 
 # Set master PID and state locations
 pidfile "#{shared_dir}/pids/puma.pid"
