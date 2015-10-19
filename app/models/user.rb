@@ -62,20 +62,27 @@ class User < ActiveRecord::Base
   end
 
   class Entity < Grape::Entity
-    expose :id
-    expose :nick
-    expose :email
-    expose :first_name
-    expose :last_name
-    expose :picture
-    expose :duels_count
-    expose :friends_count
-    expose :rank
-    expose :slogan_default, as: :slogan
+    with_options(format_with: :empty_string) do
+      expose :id
+      expose :nick
+      expose :email
+      expose :first_name
+      expose :last_name
+      expose :picture
+      expose :duels_count
+      expose :friends_count
+      expose :rank
+      expose :slogan_default, as: :slogan
+    end
     expose :character_id
     expose :character_name
     expose :character_order
     expose :open_duels
     expose :last_duels
+
+    private
+      def empty_string(value)
+        value || ""
+      end
   end
 end
