@@ -73,10 +73,10 @@ class User < ActiveRecord::Base
       expose :friends_count
       expose :rank
       expose :slogan_default, as: :slogan
+      expose :character_id
+      expose :character_name
+      expose :character_order
     end
-    expose :character_id
-    expose :character_name
-    expose :character_order
     expose :open_duels
     expose :last_duels
 
