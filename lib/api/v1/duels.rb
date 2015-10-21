@@ -70,8 +70,13 @@ module API
           requires :user_id, type: Integer, desc: "Challenger"
           requires :opponent_id, type: Integer, desc: "Challengee"
         end
+
         post do
-          present create_duel(params[:user_id], params[:opponent_id], params[:bet])
+          if params[:user_id] != params[:opponent_id]
+            present create_duel(params[:user_id], params[:opponent_id], params[:bet])
+          else
+            error! "You can't challenge yourself."
+          end
         end
 
         params do
