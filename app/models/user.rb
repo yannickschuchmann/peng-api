@@ -8,6 +8,14 @@ class User < ActiveRecord::Base
 
   after_create :new_user
 
+  def initialize(attributes={})
+    attr_with_defaults = {
+      :slogan => "Hey there! I am using Peng.",
+      :character_id => Character.find_by_name("medic").id
+    }.merge(attributes)
+    super(attr_with_defaults)
+  end
+
   def new_user
     WebsocketRails.users.each do |connection|
       connection.send_message "user.new", {users: User.all}
@@ -26,17 +34,16 @@ class User < ActiveRecord::Base
     self.duels.count
   end
 
+  def character_id
+    self.character.try(:id)
+  end
+
   def character_name
-    cn = self.character.try(:name)
-    cn ? cn : "medic"
+    self.character.try(:name)
   end
 
   def character_order
-    if self.character
-      self.character.order
-    else
-      1
-    end
+    self.character.try(:order)
   end
 
   def open_duels
@@ -69,14 +76,14 @@ class User < ActiveRecord::Base
       expose :first_name
       expose :last_name
       expose :picture
-      expose :duels_count
-      expose :friends_count
-      expose :rank
-      expose :slogan_default, as: :slogan
-      expose :character_id
+      expose :slogan
       expose :character_name
       expose :character_order
     end
+    expose :character_id
+    expose :duels_count
+    expose :friends_count
+    expose :rank
     expose :open_duels
     expose :last_duels
 
