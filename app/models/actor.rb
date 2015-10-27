@@ -14,11 +14,11 @@ class Actor < ActiveRecord::Base
   end
 
   def nick
-    self.user.nick
+    self.user.try(:nick)
   end
 
   def character_name
-    self.user.character_name
+    self.user.try(:character_name)
   end
 
   def entity

@@ -25,7 +25,34 @@ module API
 
       resource :duels do
 
-        desc "Return a user."
+
+        desc "create"
+        params do
+          requires :user_id, type: Integer, desc: "Challenger"
+          requires :opponent_id, type: Integer, desc: "Challengee"
+        end
+
+        post do
+          if params[:user_id] != params[:opponent_id]
+            present create_duel(params[:user_id], params[:opponent_id], params[:bet])
+          else
+            error! "You can't challenge yourself."
+          end
+        end
+
+        desc "random"
+        params do
+          requires :user_id, type: Integer, desc: "Challenger"
+        end
+
+        post :random do
+          user_id = params[:user_id]
+          opponent_id = User.where.not(id: user_id).limit(1).order("RANDOM()").first.id
+
+          present create_duel(user_id, opponent_id, "")
+        end
+
+        desc "detail"
         params do
           requires :id, type: Integer, desc: "duel id."
         end
@@ -60,33 +87,6 @@ module API
             end
 
           end
-        end
-
-        get do
-          present Duel.all
-        end
-
-        params do
-          requires :user_id, type: Integer, desc: "Challenger"
-          requires :opponent_id, type: Integer, desc: "Challengee"
-        end
-
-        post do
-          if params[:user_id] != params[:opponent_id]
-            present create_duel(params[:user_id], params[:opponent_id], params[:bet])
-          else
-            error! "You can't challenge yourself."
-          end
-        end
-
-        params do
-          requires :user_id, type: Integer, desc: "Challenger"
-        end
-        post :random do
-          user_id = params[:user_id]
-          opponent_id = User.where.not(id: user_id).limit(1).order("RANDOM()").first.id
-
-          present create_duel(user_id, opponent_id, "")
         end
       end
     end

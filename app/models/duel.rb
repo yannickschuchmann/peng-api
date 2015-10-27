@@ -70,7 +70,7 @@ class Duel < ActiveRecord::Base
   end
 
   def bet_default
-    self.bet == "" ? "Zufallsduel" : self.bet
+    self.bet == "" ? "random duel" : self.bet
   end
 
   def me? user_id
