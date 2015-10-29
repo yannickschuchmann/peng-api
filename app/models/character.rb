@@ -11,5 +11,6 @@ class Character < ActiveRecord::Base
     expose :name
     expose :name_de
     expose :description
+    expose :description_de
   end
 end
