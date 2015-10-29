@@ -23,7 +23,11 @@ class Duel < ActiveRecord::Base
     #   WebsocketRails.users[actor.user_id].send_message "duel.end_of_round", data.as_json
     # end
 
-    return if self.winner
+    if self.winner
+      self.winner.user.duels_won_count += 1
+      self.winner.user.save
+      return
+    end
 
     Round.create(rid: self.rounds.length, duel_id: self.id, active: true)
   end

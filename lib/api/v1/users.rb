@@ -16,7 +16,8 @@ module API
         end
 
         get do
-          present User.all.order(:updated_at)
+          # present User.all.order(:updated_at)
+          present User.ranking
         end
 
         put ':id' do

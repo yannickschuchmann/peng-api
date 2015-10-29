@@ -3,8 +3,8 @@ class User < ActiveRecord::Base
   has_many :duels, through: :actors
   has_many :actions, through: :actors
   belongs_to :character
-
   has_many :user_provider
+
 
   after_create :new_user
 
@@ -14,6 +14,13 @@ class User < ActiveRecord::Base
       :character_id => Character.find_by_name("medic").id
     }.merge(attributes)
     super(attr_with_defaults)
+  end
+
+  def self.ranking
+    def ranking_sort
+      duels_count != 0 ? duels_won_count / duels_count : -1
+    end
+    User.all.sort_by(&:ranking_sort).reverse
   end
 
   def new_user
@@ -82,6 +89,7 @@ class User < ActiveRecord::Base
     end
     expose :character_id
     expose :duels_count
+    expose :duels_won_count
     expose :friends_count
     expose :rank
     expose :open_duels
