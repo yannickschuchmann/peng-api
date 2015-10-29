@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   end
 
   def rank
-    User.all.order(:updated_at).map(&:id).index(self.id) + 1 # very fake rank
+    User.ranking.map(&:id).index(self.id) + 1 # very fake rank
   end
 
   def friends_count
