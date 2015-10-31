@@ -3,6 +3,8 @@ class Round < ActiveRecord::Base
   has_many :actions, dependent: :destroy
   has_many :actors, through: :actions
 
+  scope :finished, -> { where(:active => false) }
+
   def evaluate
     return if self.actions.length != 2
 
@@ -52,13 +54,33 @@ class Round < ActiveRecord::Base
       result["type"] = "hit"
       result["offensive"] = actions[1].actor
       result["victim"] = actions[0].actor
+    elsif actions[0].type == "neutral" and actions[1].type == "defensive"
+      result["type"] = "reloaded"
+      result["defensive"] = actions[1].actor
+      result["neutral"] = actions[0].actor
+    elsif actions[1].type == "neutral" and actions[0].type == "defensive"
+      result["type"] = "reloaded"
+      result["defensive"] = actions[0].actor
+      result["neutral"] = actions[1].actor
     elsif actions[0].type == actions[1].type
-      result["type"] = "same"
-      result["action"] = actions[0].type
+      type = actions[0].type
+      result["action"] = type
+      result["type"] = type == "offensive" ? "draw" :
+                       type == "defensive" ? "both_blocked" :
+                       type == "neutral" ? "both_reloaded" : "error"
     else
-      result["type"] = "nothing"
+      result["type"] = "error"
     end
 
     result
   end
+
+  def get_user_action user_id
+    user_action = nil
+    self.actions.each do |action|
+      user_action = action if action.actor.user_id == user_id
+    end
+    user_action
+  end
+
 end

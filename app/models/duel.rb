@@ -59,14 +59,31 @@ class Duel < ActiveRecord::Base
 
   def result? user_id
     status = status(user_id)
-    if self.rounds.length == 2 && self.rounds.last.actions.length == 0
+    current_round = self.rounds.last
+    if self.rounds.finished.length == 1 && current_round.get_user_action(user_id) == nil
       'versus'
-    elsif status == "my_turn"
-      result_type = self.last_active_round.get_result["type"]
+    elsif status == 'my_turn'
+      result_type = self.last_active_round.get_result['type']
+      if result_type == 'reloaded'
+        if self.last_active_round.get_user_action(user_id).type == 'neutral'
+          result_type = 'you_reloaded'
+        else
+          result_type = 'enemy_reloaded'
+        end
+      end
+      result_type
+    elsif status == 'wait'
+      type = self.rounds.last.get_user_action(user_id).type
+      if type == 'offensive'
+        'you_shoot'
+      elsif type == 'defensive'
+        'you_block'
+      elsif type == 'neutral'
+        'you_reload'
+      end
     else
-      status
+      "you_#{status}"
     end
-
   end
 
   def my_turn? user_id
