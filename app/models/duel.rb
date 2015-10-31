@@ -140,10 +140,10 @@ class Duel < ActiveRecord::Base
       if options[:user_id]
         status = duel.status(options[:user_id])
         case status
-          when "won" then "Gewonnen"
-          when "lost" then "Verloren"
-          when "my_turn" then "Du bist dran"
-          when "wait" then "Warten ..."
+          when "won" then "YOU WON"
+          when "lost" then "YOU LOST"
+          when "my_turn" then "YOUR TURN!"
+          when "wait" then "WAITING ..."
         end
       end
     end
@@ -155,6 +155,10 @@ class Duel < ActiveRecord::Base
     end
     expose :result do |duel,options|
       duel.result?(options[:user_id]) if options[:user_id]
+    end
+
+    expose :active do |duel, options|
+      duel.rounds.last.active
     end
     expose :updated_at
   end
