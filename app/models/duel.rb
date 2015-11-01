@@ -106,17 +106,17 @@ class Duel < ActiveRecord::Base
     end
   end
 
-  def my_action? user_id
-    self.last_active_round.actions.each do |action|
+  def my_action? user_id, round = self.last_active_round
+    round.actions.each do |action|
       return action if action.actor.user_id == user_id
-    end unless self.last_active_round.nil?
+    end unless round.nil?
     return false
   end
 
-  def opponent_action? user_id
-    self.last_active_round.actions.each do |action|
+  def opponent_action? user_id, round = self.last_active_round
+    round.actions.each do |action|
       return action if action.actor.user_id != user_id
-    end unless self.last_active_round.nil?
+    end unless round.nil?
     return false
   end
 
@@ -131,7 +131,20 @@ class Duel < ActiveRecord::Base
       duel.me?(options[:user_id]) if options[:user_id]
     end
     expose :opponent, with: Actor::Entity do |duel,options|
-      duel.opponent?(options[:user_id]) if options[:user_id]
+      actor = duel.opponent?(options[:user_id]) if options[:user_id]
+
+      op_action = duel.my_action?(actor.user_id, duel.rounds.last)
+
+      if !actor.nil? && !duel.my_turn?(actor.user_id) &&
+          op_action != false &&
+          duel.rounds.last.active
+        if op_action.type == "offensive"
+          actor.shots += 1
+        elsif op_action.type == "neutral"
+          actor.shots -= 1
+        end
+      end
+      actor
     end
     expose :my_turn do |duel,options|
       duel.my_turn?(options[:user_id]) if options[:user_id]
