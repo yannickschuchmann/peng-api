@@ -3,6 +3,8 @@ class Round < ActiveRecord::Base
   has_many :actions, dependent: :destroy
   has_many :actors, through: :actions
 
+  default_scope { order('created_at ASC') }
+
   scope :finished, -> { where(:active => false) }
 
   def evaluate
