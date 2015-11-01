@@ -68,7 +68,9 @@ module API
             duel = Duel.find(params[:id].to_i)
             current_round = duel.rounds.last
             actor = duel.me? user_id
-            if current_round.my_turn?(user_id) && actor
+            if current_round.my_turn?(user_id) && actor &&
+                !(params[:action_type] == "offensive" && actor.shots == 0) &&
+                !(params[:action_type] == "neutral" && actor.shots == 3)
               action = Action.create(
                   round_id: current_round.id,
                   actor_id: actor.id,
