@@ -120,12 +120,18 @@ class Duel < ActiveRecord::Base
     return false
   end
 
+  def round_count
+    self.rounds.length - 1
+  end
+
   def entity
     Entity.new(self)
   end
 
+
   class Entity < Grape::Entity
     expose :id
+    expose :round_count
     expose :bet_default, as: :bet
     expose :me, with: Actor::Entity do |duel,options|
       duel.me?(options[:user_id]) if options[:user_id]
